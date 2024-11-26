@@ -14,7 +14,6 @@ interface Song {
 
 export default function Home() {
   const [songs, setSongs] = useState<Song[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("");
   const [group, setGroup] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
@@ -53,10 +52,10 @@ export default function Home() {
 
       {/* Форма добавления песни */}
       <form onSubmit={handleAddSong} className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm">
-        <h2 className="text-xl font-semibold mb-4">Add a Song</h2>
+        <h2 className="text-xl font-semibold mb-4">Добавить песню</h2>
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="title">
-            Title:
+            Группа:
           </label>
           <input
             id="title"
@@ -69,7 +68,7 @@ export default function Home() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="artist">
-            Artist:
+            Песня:
           </label>
           <input
             id="artist"
@@ -81,7 +80,7 @@ export default function Home() {
           />
         </div>
         <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-          Add Song
+          Добавить песню
         </button>
         {message && (
           <p className={`mt-4 ${message.includes("successfully") ? "text-green-600" : "text-red-600"}`}>{message}</p>

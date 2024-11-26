@@ -8,11 +8,28 @@ interface Song {
   group_name: string;
   song_name: string;
   text: string;
+  release_date?: string;
+  link?: string;
 }
 
 interface UpdateSongParams {
   updatedTitle: string;
   updatedGroup: string;
+  updatedText: string;
+  updatedReleaseDate?: string;
+  updatedLink?: string;
+}
+
+interface ModalProps {
+  song: Song;
+  onClose: () => void;
+  onSave: (
+    updatedTitle: string,
+    updatedGroup: string,
+    updatedText: string,
+    updatedReleaseDate?: string,
+    updatedLink?: string
+  ) => void;
 }
 
 export default function Song() {
@@ -29,6 +46,7 @@ export default function Song() {
       .then((response) => {
         const data = response.data;
         setSongs(data);
+        console.log(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -58,11 +76,17 @@ export default function Song() {
     }
   };
 
-  const handleUpdateSong = async (id: number, { updatedTitle, updatedGroup }: UpdateSongParams): Promise<void> => {
+  const handleUpdateSong = async (
+    id: number,
+    { updatedTitle, updatedGroup, updatedText, updatedReleaseDate, updatedLink }: UpdateSongParams
+  ): Promise<void> => {
     try {
       const response = await axios.put(SONG_UPDATE(id), {
         song_name: updatedTitle,
         group_name: updatedGroup,
+        text: updatedText,
+        release_date: updatedReleaseDate,
+        link: updatedLink,
       });
 
       if (response.status === 200) {
@@ -70,7 +94,16 @@ export default function Song() {
 
         setSongs((prevSongs) =>
           prevSongs.map((song) =>
-            song.id === id ? { ...song, song_name: updatedSong.song_name, group_name: updatedSong.group_name } : song
+            song.id === id
+              ? {
+                  ...song,
+                  song_name: updatedSong.song_name,
+                  group_name: updatedSong.group_name,
+                  text: updatedSong.text,
+                  release_date: updatedSong.release_date,
+                  link: updatedSong.link,
+                }
+              : song
           )
         );
 
@@ -110,6 +143,7 @@ export default function Song() {
               <h2 className="text-lg font-semibold">{song.group_name}</h2>
               <p className="text-gray-600">{song.song_name}</p>
               <p className="text-gray-600">{song.text}</p>
+              <p className="text-gray-600">{song.link}</p>
 
               <div className="flex space-x-2 mt-2">
                 {/* Update Song */}
@@ -117,7 +151,7 @@ export default function Song() {
                   onClick={() => openModal(song)}
                   className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
                 >
-                  Update
+                  Обнвоить
                 </button>
 
                 {/* Delete Song */}
@@ -125,7 +159,7 @@ export default function Song() {
                   onClick={() => handleDeleteSong(song.id)}
                   className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
                 >
-                  Delete
+                  Удалить
                 </button>
               </div>
             </li>
@@ -141,8 +175,14 @@ export default function Song() {
         <Modal
           song={currentSong}
           onClose={closeModal}
-          onSave={(updatedTitle, updatedGroup) => {
-            handleUpdateSong(currentSong.id, { updatedTitle, updatedGroup });
+          onSave={(updatedTitle, updatedGroup, updatedText, updatedReleaseDate, updatedLink) => {
+            handleUpdateSong(currentSong.id, {
+              updatedTitle,
+              updatedGroup,
+              updatedText,
+              updatedReleaseDate,
+              updatedLink,
+            });
             closeModal();
           }}
         />
@@ -152,26 +192,32 @@ export default function Song() {
 }
 
 // Компонент модального окна
-interface ModalProps {
-  song: Song;
-  onClose: () => void;
-  onSave: (updatedTitle: string, updatedGroup: string) => void;
-}
-
 function Modal({ song, onClose, onSave }: ModalProps) {
   const [updatedTitle, setUpdatedTitle] = useState(song.song_name);
   const [updatedGroup, setUpdatedGroup] = useState(song.group_name);
+  const [updatedText, setUpdatedText] = useState(song.text);
+  const [updatedReleaseDate, setUpdatedReleaseDate] = useState(song.release_date || "");
+  const [updatedLink, setUpdatedLink] = useState(song.link || "");
 
   const handleSubmit = () => {
-    onSave(updatedTitle, updatedGroup);
+    onSave(updatedTitle, updatedGroup, updatedText, updatedReleaseDate, updatedLink);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold mb-4">Edit Song</h2>
+        <h2 className="text-2xl font-semibold mb-4">Изменить песню</h2>
         <div className="mb-4">
-          <label className="block mb-2 font-medium">Song Title</label>
+          <label className="block mb-2 font-medium">Назание</label>
+          <input
+            type="text"
+            value={updatedGroup}
+            onChange={(e) => setUpdatedGroup(e.target.value)}
+            className="w-full border rounded-md px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Группа</label>
           <input
             type="text"
             value={updatedTitle}
@@ -180,17 +226,39 @@ function Modal({ song, onClose, onSave }: ModalProps) {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-2 font-medium">Group Name</label>
+          <label className="block mb-2 font-medium">Текст</label>
+          <textarea
+            value={updatedText}
+            onChange={(e) => setUpdatedText(e.target.value)}
+            className="w-full border rounded-md px-3 py-2"
+            rows={5}
+          ></textarea>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Дата</label>
           <input
-            type="text"
-            value={updatedGroup}
-            onChange={(e) => setUpdatedGroup(e.target.value)}
+            type="date"
+            value={updatedReleaseDate}
+            onChange={(e) => setUpdatedReleaseDate(e.target.value)}
+            className="w-full border rounded-md px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2 font-medium">Song Link</label>
+          <input
+            type="url"
+            value={updatedLink}
+            onChange={(e) => setUpdatedLink(e.target.value)}
             className="w-full border rounded-md px-3 py-2"
           />
         </div>
         <div className="flex justify-end space-x-2">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded-md">
+            Выход
+          </button>
+          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md">
+            Сохранить
+          </button>
         </div>
       </div>
     </div>

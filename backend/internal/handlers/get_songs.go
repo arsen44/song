@@ -9,6 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
+// @Summary Получить список песен
+// @Description Возвращает список всех песен
+// @Tags songs
+// @Produce json
+// @Success 200 {array} models.Song
+// @Router /songs/ [get]
 func GetSongs(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		group := c.Query("group")

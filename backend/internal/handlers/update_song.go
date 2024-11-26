@@ -9,6 +9,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// @Summary Обновить песню
+// @Description Обновляет информацию о песне по ID
+// @Tags models.Song
+// @Accept json
+// @Produce json
+// @Param id path int true "ID песни"
+// @Param song body models.Song true "Обновленные данные песни"
+// @Success 200 {object} models.Song
+// @Failure 400 {string} string "Ошибка в запросе"
+// @Failure 404 {string} string "Песня не найдена"
+// @Router /songs/{id}/ [put]
 func UpdateSong(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")

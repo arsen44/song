@@ -1,4 +1,4 @@
-export const baseUrl = `http://192.168.1.67:2152`;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:2152";
 
 // Golang Microservice API
 export const ADD_SONG = `${baseUrl}/add-song/`;

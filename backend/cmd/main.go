@@ -2,11 +2,20 @@ package main
 
 import (
 	"log"
+	_ "song/docs"
 	psq "song/internal/db"
 	"song/internal/handlers"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title Song API
+// @version 1.0
+// @description API для управления песнями
+// @host localhost:2152
+// @BasePath /
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -38,10 +47,10 @@ func main() {
 	// Инициализация Gin роутера
 	r := gin.Default()
 	r.Use(CORSMiddleware())
-	// Роуты
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	r.POST("/add-song/", handlers.AddSong(db))
 	r.GET("/songs/", handlers.GetSongs(db))
-	r.GET("/songs/:id/text/", handlers.GetSongText(db))
 	r.PUT("/songs/:id/", handlers.UpdateSong(db))
 	r.DELETE("/songs/:id/", handlers.DeleteSong(db))
 

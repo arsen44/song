@@ -3,28 +3,29 @@ package db
 import (
 	"fmt"
 	"log"
+	"os"
 	"song/internal/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// var (
-// 	POSTGRES_HOST     = os.Getenv("POSTGRES_HOST")
-// 	POSTGRES_USER     = os.Getenv("POSTGRES_USER")
-// 	POSTGRES_PORT     = os.Getenv("DB_PORT")
-// 	POSTGRES_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
-// 	POSTGRES_NAME     = os.Getenv("POSTGRES_NAME")
-// )
+var (
+	POSTGRES_HOST     = os.Getenv("POSTGRES_HOST")
+	POSTGRES_USER     = os.Getenv("POSTGRES_USER")
+	POSTGRES_PORT     = os.Getenv("DB_PORT")
+	POSTGRES_PASSWORD = os.Getenv("POSTGRES_PASSWORD")
+	POSTGRES_NAME     = os.Getenv("POSTGRES_NAME")
+)
 
 // Жестко закодированные значения переменных окружения
-var (
-	POSTGRES_HOST     = "192.168.1.67"
-	POSTGRES_USER     = "postgres"
-	POSTGRES_PORT     = "5432"
-	POSTGRES_PASSWORD = "170888"
-	POSTGRES_NAME     = "postgres"
-)
+// var (
+// 	POSTGRES_HOST     = "192.168.1.67"
+// 	POSTGRES_USER     = "postgres"
+// 	POSTGRES_PORT     = "5432"
+// 	POSTGRES_PASSWORD = "170888"
+// 	POSTGRES_NAME     = "postgres"
+// )
 
 func ConnectToDB() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(

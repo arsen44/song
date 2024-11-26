@@ -11,7 +11,13 @@ import (
 	"gorm.io/gorm"
 )
 
-// AddSong обрабатывает запрос на добавление песни
+// @Summary Добавить песню
+// @Description Добавляет новую песню в базу данных
+// @Tags songs
+// @Param song body models.Song  true "Данные песни"
+// @Success 200 {object} models.Song
+// @Failure 400 {string} string "Ошибка в запросе"
+// @Router /add-song/ [post]
 func AddSong(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input models.SongInput

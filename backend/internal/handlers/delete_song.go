@@ -8,6 +8,15 @@ import (
 	"gorm.io/gorm"
 )
 
+// @Summary Удалить песню
+// @Description Удаляет песню по ID
+// @Tags songs
+// @Accept json
+// @Produce json
+// @Param id path int true "ID песни"
+// @Success 200 {string} string "Песня успешно удалена"
+// @Failure 404 {string} string "Песня не найдена"
+// @Router /songs/{id}/ [delete]
 func DeleteSong(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
