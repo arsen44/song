@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { ADD_SONG } from "../../helpers/constants";
+import Song from "./component/song";
 
 // Тип для песни
 interface Song {
   id: number;
-  title: string;
-  artist: string;
+  group_name: string;
+  song_name: string;
+  text: string;
 }
 
 export default function Home() {
@@ -16,24 +19,13 @@ export default function Home() {
   const [group, setGroup] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
 
-  // Получение списка песен
-  useEffect(() => {
-    fetch("http://192.168.1.67:8080/songs/")
-      .then((res) => res.json())
-      .then((data: Song[]) => {
-        setSongs(data);
-        setLoading(false);
-      })
-      .catch((err) => console.log("Failed to fetch songs:", err));
-  }, []);
-
   // Обработчик добавления песни
   const handleAddSong = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
 
     try {
-      const response = await fetch("http://192.168.1.67:2152/add-song/", {
+      const response = await fetch(ADD_SONG, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ group: group, song: title }),
@@ -97,17 +89,7 @@ export default function Home() {
       </form>
 
       {/* Список песен */}
-      <ul className="space-y-4">
-        {songs.map((song) => (
-          <li
-            key={song.id}
-            className="p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-          >
-            <h2 className="text-lg font-semibold">{song.title}</h2>
-            <p className="text-gray-600">By {song.artist}</p>
-          </li>
-        ))}
-      </ul>
+      <Song />
     </div>
   );
 }
