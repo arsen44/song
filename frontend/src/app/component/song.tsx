@@ -5,7 +5,7 @@ import axios from "axios";
 // Тип для песни
 interface Song {
   id: number;
-  group_name: string;
+  album_id: string;
   song_name: string;
   text: string;
   release_date?: string;
@@ -140,7 +140,7 @@ export default function Song() {
               key={song.id}
               className="p-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
-              <h2 className="text-lg font-semibold">{song.group_name}</h2>
+              <h2 className="text-lg font-semibold">{song.album.Title}</h2>
               <p className="text-gray-600">{song.song_name}</p>
               <p className="text-gray-600">{song.text}</p>
               <p className="text-gray-600">{song.link}</p>

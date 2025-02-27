@@ -35,7 +35,7 @@ type Album struct {
 	Artist      Artist    `gorm:"foreignKey:ArtistID"`
 	ReleaseDate time.Time `gorm:"index;not null"`
 	CoverURL    string    `gorm:"type:varchar(255)"`
-	AlbumType   string    `gorm:"type:varchar(50);not null"` // album, single, EP
+	AlbumType   string    `gorm:"type:varchar(50);not null"`
 	Songs       []Song    `gorm:"foreignKey:AlbumID"`
 }
 
@@ -46,7 +46,7 @@ type Song struct {
 	ArtistID    uint       `gorm:"index;not null" json:"artist_id"`
 	Artist      Artist     `gorm:"foreignKey:ArtistID" json:"-"`
 	AlbumID     uint       `gorm:"index" json:"album_id"`
-	Album       Album      `gorm:"foreignKey:AlbumID" json:"-"`
+	Album       Album      `gorm:"foreignKey:AlbumID" json:"album"`
 	Duration    int        `gorm:"not null" json:"duration"` // длительность в секундах
 	ReleaseDate time.Time  `gorm:"index;not null" json:"release_date"`
 	AudioURL    string     `gorm:"type:varchar(255);not null" json:"audio_url"`

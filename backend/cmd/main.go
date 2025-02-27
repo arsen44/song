@@ -41,18 +41,12 @@ func main() {
 		log.Println("Не удалось подключиться к базе данных: " + err.Error())
 	}
 
-	// Заполнение базы данных фиктивными данными
-	psq.FillDatabase(db)
-
 	// Инициализация Gin роутера
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.POST("/add-song/", handlers.AddSong(db))
 	r.GET("/songs/", handlers.GetSongs(db))
-	r.PUT("/songs/:id/", handlers.UpdateSong(db))
-	r.DELETE("/songs/:id/", handlers.DeleteSong(db))
 
 	if err := r.Run(":2152"); err != nil {
 		log.Fatal("failed run app: ", err)

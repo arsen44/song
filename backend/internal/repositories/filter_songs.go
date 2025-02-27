@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func FilterSongs(db *gorm.DB, group, song string, page, limit int) ([]models.Song, error) {
+func FilterSongs(db *gorm.DB, albumID uint, song string, page, limit int) ([]models.Song, error) {
 	var songs []models.Song
-	query := db.Model(&models.Song{})
+	query := db.Model(&models.Song{}).Preload("Album")
 
-	if group != "" {
-		query = query.Where("group_name ILIKE ?", "%"+group+"%")
+	if albumID != 0 {
+		query = query.Where("album_id = ?", albumID)
 	}
 	if song != "" {
-		query = query.Where("song_name ILIKE ?", "%"+song+"%")
+		query = query.Where("song_title ILIKE ?", "%"+song+"%")
 	}
 
 	offset := (page - 1) * limit

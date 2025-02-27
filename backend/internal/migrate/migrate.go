@@ -58,16 +58,15 @@ func main() {
 // Создание начальных жанров
 func createInitialGenres(db *gorm.DB) {
 	genres := []string{
-		"Rock", "Pop", "Hip-Hop", "R&B", "Electronic", 
+		"Rock", "Pop", "Hip-Hop", "R&B", "Electronic",
 		"Jazz", "Classical", "Country", "Folk", "Metal",
 		"Indie", "Blues", "Reggae", "Funk", "Soul",
-		"Punk", "Alternative", "Dance", "Disco", "Latin"
-	}
+		"Punk", "Alternative", "Dance", "Disco", "Latin"}
 
 	for _, genre := range genres {
 		var count int64
 		db.Model(&models.Genre{}).Where("name = ?", genre).Count(&count)
-		
+
 		if count == 0 {
 			db.Create(&models.Genre{
 				Name: genre,
@@ -81,7 +80,7 @@ func addTestData(db *gorm.DB) {
 	// Проверяем, есть ли уже данные в базе
 	var artistCount int64
 	db.Model(&models.Artist{}).Count(&artistCount)
-	
+
 	if artistCount > 0 {
 		fmt.Println("Тестовые данные уже существуют, пропускаем создание...")
 		return
@@ -102,7 +101,7 @@ func addTestData(db *gorm.DB) {
 			DisplayName: "Музыкальный Фанат",
 		},
 	}
-	
+
 	for i := range users {
 		db.Create(&users[i])
 	}
@@ -132,7 +131,7 @@ func addTestData(db *gorm.DB) {
 			ImageURL:    "https://example.com/images/billie_eilish.jpg",
 		},
 	}
-	
+
 	for i := range artists {
 		db.Create(&artists[i])
 	}
@@ -161,7 +160,7 @@ func addTestData(db *gorm.DB) {
 			AlbumType:   "album",
 		},
 	}
-	
+
 	for i := range albums {
 		db.Create(&albums[i])
 	}
@@ -229,7 +228,7 @@ func addTestData(db *gorm.DB) {
 			PlayCount:   2198,
 		},
 	}
-	
+
 	for i := range songs {
 		db.Create(&songs[i])
 	}
@@ -246,7 +245,7 @@ func addTestData(db *gorm.DB) {
 		{SongID: songs[5].ID, GenreID: popGenre.ID},
 		{SongID: songs[5].ID, GenreID: electronicGenre.ID},
 	}
-	
+
 	for i := range songGenres {
 		db.Create(&songGenres[i])
 	}
@@ -275,7 +274,7 @@ func addTestData(db *gorm.DB) {
 			IsPublic:    false,
 		},
 	}
-	
+
 	for i := range playlists {
 		db.Create(&playlists[i])
 	}
@@ -290,7 +289,7 @@ func addTestData(db *gorm.DB) {
 		{PlaylistID: playlists[2].ID, SongID: songs[1].ID, Position: 1},
 		{PlaylistID: playlists[2].ID, SongID: songs[5].ID, Position: 2},
 	}
-	
+
 	for i := range playlistSongs {
 		db.Create(&playlistSongs[i])
 	}
@@ -304,7 +303,7 @@ func addTestData(db *gorm.DB) {
 		{UserID: users[1].ID, SongID: songs[3].ID},
 		{UserID: users[1].ID, SongID: songs[5].ID},
 	}
-	
+
 	for i := range userLikedSongs {
 		db.Create(&userLikedSongs[i])
 	}

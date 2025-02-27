@@ -17,12 +17,20 @@ import (
 // @Router /songs/ [get]
 func GetSongs(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		group := c.Query("group")
+		albumIDStr := c.Query("album_id")
+		var albumID uint
+		if albumIDStr != "" {
+			parsedID, err := strconv.ParseUint(albumIDStr, 10, 32)
+			if err == nil {
+				albumID = uint(parsedID)
+			}
+		}
+
 		song := c.Query("song")
 		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 		limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 
-		songs, err := repositories.FilterSongs(db, group, song, page, limit)
+		songs, err := repositories.FilterSongs(db, albumID, song, page, limit)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve songs"})
 			return
