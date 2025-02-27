@@ -1,0 +1,38 @@
+services:
+  backend:
+    image: backend
+    container_name: backend
+    build:
+      context: ./backend/
+      dockerfile: ./cmd/Dockerfile
+    ports:
+      - 2152:2152
+    env_file:
+      - ./envs/db.env
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - 5432:5432
+    env_file:
+      - ./envs/db.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  frontend:
+    restart: unless-stopped
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: /frontend/Dockerfile
+    command: sh -c "yarn dev"
+    ports:
+      - 3000:3000 # Меняем expose на ports
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data: {}
