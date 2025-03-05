@@ -37,10 +37,10 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	songRepo := repositories.NewSongRepository(db)
 
 	// Инициализация обработчиков
-	songHandler := handlers.NewSongHandler(songRepo)
+	songHandler := handlers.NewSongHandlers(songRepo)
 
 	// Настройка маршрутов
-	r.GET("/songs/", songHandler.GetSongs())
-
+	r.GET("/songs/", songHandler.GetAllSongs)
+	r.DELETE("/songs/:id", songHandler.DeleteSongs)
 	return r
 }
