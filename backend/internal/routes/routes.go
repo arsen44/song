@@ -40,7 +40,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	songHandler := handlers.NewSongHandler(songRepo)
 
 	// Настройка маршрутов
-	r.GET("/songs", songHandler.GetSongs())
+	r.GET("/songs/", songHandler.GetSongs())
 
 	return r
 }

@@ -18,7 +18,7 @@ import (
 
 // Жестко закодированные значения переменных окружения
 var (
-	POSTGRES_HOST     = "192.168.1.68"
+	POSTGRES_HOST     = "192.168.1.70"
 	POSTGRES_USER     = "postgres"
 	POSTGRES_PORT     = "5432"
 	POSTGRES_PASSWORD = "170888"
